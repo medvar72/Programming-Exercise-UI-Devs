@@ -29,6 +29,7 @@
 
     <script>
         let maxNbrMonths = 84;
+        var namesOfMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
         var startDate = null;
         var nDays = null;
         var countryCode = null;
@@ -46,6 +47,14 @@
             nDays = document.getElementById("numberDays");
             countryCode = document.getElementById("countryCode");
         }
+
+        // get numer of the day from date (0 Sundar ... 6 Sat)
+        function getDay(date){
+            let day = date.getDay();
+            return day;
+        }
+
+        
         
         
         
