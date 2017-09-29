@@ -28,6 +28,27 @@
     </form>
 
     <script>
+        let maxNbrMonths = 84;
+        var startDate = null;
+        var nDays = null;
+        var countryCode = null;
+        var myDivs = [];
+        var body = document.getElementsByTagName("body")[0]; // get the reference for the body
+        // let's to create the divs that will contain the caledars
+        for (let i = 0; i < maxNbrMonths; i++){
+            myDivs[i] = document.createElement("div");
+            myDivs[i].id = "div"+i;
+        }
+        
+        //get the reference for the inputs objects
+        function onload(){
+            startDate = document.getElementById("startDate");
+            nDays = document.getElementById("numberDays");
+            countryCode = document.getElementById("countryCode");
+        }
+        
+        
+        
         function doIt() {
             //TODO : draw the calendar
             alert("Please draw me!!!");
