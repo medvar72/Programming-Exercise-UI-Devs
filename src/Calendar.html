@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,23 +11,34 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-   <!-- StyleSheet -->
-   <link href="../css/myStyle.css">   
+    <!-- StyleSheet -->
+    <link href="../css/myStyle.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
+</head>
+
+<body>
     <form action="#">
-        Start Date: <input placeholder="yyyy/mm/dd" type="text" name="startDate" id="startDate" maxlength="10" size="10"/> <br/><br>
+        Start Date: <input placeholder="yyyy/mm/dd" type="text" name="startDate" id="startDate" maxlength="10" size="10" /> <br/><br> Number of days: <input placeholder="Nbr. Days" type="number" name="numberDays" id="numberDays" maxlength="3" size="3" /> <br/><br/> Country code: <input placeholder="Country Code" type="text" name="countryCode" id="countryCode" maxlength="2" size="2" style="text-transform: uppercase" /> <br/> <br/>
+        <input type="button" value="Draw Calendar" onclick="doIt();" />
     </form>
+
+    <script>
+        function doIt() {
+            //TODO : draw the calendar
+            alert("Please draw me!!!");
+        }
+
+    </script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </body>
+</body>
+
 </html>
