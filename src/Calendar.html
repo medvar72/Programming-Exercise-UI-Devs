@@ -6,19 +6,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-
+    
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">-->
+    
 
     <!-- StyleSheet -->
-    <link href="../css/myStyle.css">
+    <link href="../css/myStyle.css"> 
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!--
+    <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    td,
+    th {
+      border: 1px solid black;
+      padding: 3px;
+      text-align: center;
+    }
+
+    th {
+      font-weight: bold;
+      background-color: #E6E6E6;
+    }
+  </style>
+  -->
 </head>
 
 <body onload="onload();">
@@ -78,48 +99,7 @@
         
         //get the name of the month mon        
         function getNameOfMonth(mon){
-        var name = '';
-        /*
-        switch (mon) {
-                        case 0: 
-                                name = 'January';
-                                break;
-                        case 1: 
-                                name = 'February';
-                                break;
-                        case 2: 
-                                name = 'March';
-                                break;
-                        case 3: 
-                                name = 'April';
-                                break;
-                        case 4: 
-                                name = 'May';
-                                break;
-                        case 5: 
-                                name = 'June';
-                                break;
-                        case 6: 
-                                name = 'July';
-                                break;
-                        case 7: 
-                                name = 'August';
-                                break;
-                        case 8: 
-                                name = 'September';
-                                break;
-                        case 9: 
-                                name = 'October';
-                                break;
-                        case 10: 
-                                name = 'November';
-                                break;
-                        case 11: 
-                                name = 'December';
-                                break;
-
-                           } 
-                           */
+            var name = '';
             if (mon >= 0 && mon <= 11) {
                 name = namesOfMonths[mon];
             }
@@ -149,6 +129,10 @@
             var daysDifference = end_date.getDate() - start_date.getDate();
             var result = Math.ceil((inverse ? -1 : 1) * (yearsDifference * 12 + monthsDifference + daysDifference/30)); // Add fractional month
             return result
+      }
+          
+    function isAHoliday(yearOfDate,monthOfDate, dayOfDate,countryCode){          
+          return (parseInt(dayOfDate) == 25);
       }
         
           
@@ -230,6 +214,51 @@
       elem.innerHTML = table;    
       body.appendChild(elem);
     }
+        
+        function bIsHoliday(yearOfDate,monthOfDate, dayOfDate,countryCode){
+            var options = {};
+            options.country = countryCode;
+            options.year = yearOfDate;
+            options.month = monthOfDate;
+            options.day = dayOfDate;
+            options.apiKey = "58694fbc-e079-495c-b0e4-1a86033d0dd3";
+            options.upcoming = "true";
+            options.public = "true";
+            options.previous = "false";
+            options.pretty = "true";
+            var sURL = "https://holidayapi.com/v1/holidays?country="+options.country+"&year="+options.year+"&month="+options.month+"&day="+options.day+"&key="+options.apiKey+"&upcoming="+options.upcomings+"&public="+options.public+"&previous="+options.previous+"&pretty="+options.pretty;
+          
+            var bisAHoliday = false;
+            var data = null;
+          
+            //create an HTTP request 
+            var xhr = new XMLHttpRequest();
+          
+            //execute GET with the API url
+            xhr.open("GET",sURL,true);
+          
+            //treat success and error cases, on success bisHoliday is set to true, on error is given an error message in the console and bisHoliday is set to false
+            xhr.onload = function (e) {
+              if (xhr.readyState === 4) {
+                  if (xhr.status === 200) {
+                      console.log(xhr.response);
+                      console.log(JSON.parse(xhr.response).holidays[0].name);
+                      if (JSON.parse(xhr.response).holidays.length > 0) {
+                        bisAHoliday = true;
+                      }
+                  } else {
+                      console.error(xhr.statusText);
+                      bisAHoliday = false;
+                  }
+              }
+          };
+          xhr.onerror = function (e) {
+              console.error(xhr.statusText);
+              bisAHoliday = false;
+          };
+          xhr.send(data);
+        return bisAHoliday;
+      }
         
     function generate_table() {
         var sd = startDate.value;
