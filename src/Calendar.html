@@ -21,30 +21,43 @@
     <![endif]-->
 </head>
 
-<body>
+<body onload="onload();">
     <form action="#">
         Start Date: <input placeholder="yyyy/mm/dd" type="text" name="startDate" id="startDate" maxlength="10" size="10" /> <br/><br> Number of days: <input placeholder="Nbr. Days" type="number" name="numberDays" id="numberDays" maxlength="3" size="3" /> <br/><br/> Country code: <input placeholder="Country Code" type="text" name="countryCode" id="countryCode" maxlength="2" size="2" style="text-transform: uppercase" /> <br/> <br/>
         <input type="button" value="Draw Calendar" onclick="doIt();" />
     </form>
 
     <script>
+        var namesOfMonths = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
         let maxNbrMonths = 84;
-        var namesOfMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-        var startDate = null;
-        var nDays = null;
-        var countryCode = null;
+        var startDate;
+        var nDays;
+        var countryCode;
         var myDivs = [];
         var body = document.getElementsByTagName("body")[0]; // get the reference for the body
         // let's to create the divs that will contain the caledars
-        for (let i = 0; i < maxNbrMonths; i++){
+        for (let i = 0; i < maxNbrMonths; i++) {
             myDivs[i] = document.createElement("div");
             myDivs[i].id = "div"+i;
         }
         
         //get the reference for the inputs objects
         function onload(){
-            startDate = document.getElementById("startDate");
-            nDays = document.getElementById("numberDays");
+            startDate   = document.getElementById("startDate");
+            nDays       = document.getElementById("numberDays");
             countryCode = document.getElementById("countryCode");
         }
 
@@ -53,6 +66,210 @@
             let day = date.getDay();
             return day;
         }
+        
+        
+        //get a new date from a star date 
+        function getLastDate(date, nOfDays){
+            var lastDate = new Date();
+            if (nOfDays >= 0) lastDate.setTime(date.getTime() + (nOfDays * 86400000));
+            else lastDate = date;
+            return lastDate;
+        }
+        
+        //get the name of the month mon        
+        function getNameOfMonth(mon){
+        var name = '';
+        /*
+        switch (mon) {
+                        case 0: 
+                                name = 'January';
+                                break;
+                        case 1: 
+                                name = 'February';
+                                break;
+                        case 2: 
+                                name = 'March';
+                                break;
+                        case 3: 
+                                name = 'April';
+                                break;
+                        case 4: 
+                                name = 'May';
+                                break;
+                        case 5: 
+                                name = 'June';
+                                break;
+                        case 6: 
+                                name = 'July';
+                                break;
+                        case 7: 
+                                name = 'August';
+                                break;
+                        case 8: 
+                                name = 'September';
+                                break;
+                        case 9: 
+                                name = 'October';
+                                break;
+                        case 10: 
+                                name = 'November';
+                                break;
+                        case 11: 
+                                name = 'December';
+                                break;
+
+                           } 
+                           */
+            if (mon >= 0 && mon <= 11) {
+                name = namesOfMonths[mon];
+            }
+            else name = "undefined"
+        return name;
+                          
+      }
+        
+          var getMonthsBetween = function(date1, date2){
+              'use strict';
+                // Months will be calculated between start and end dates.
+                // Make sure start date is less than end date.
+                // But remember if the difference should be negative.
+                var start_date = date1;
+                var end_date = date2;
+                var inverse = false;
+                if (date1 > date2){
+                    start_date = date2;
+                    end_date = date1;
+                    inverse = true;
+                }
+              end_date = new Date(end_date); //If you don't do this, the original date passed will be changed. Dates are mutable objects.
+            end_date.setDate(end_date.getDate() + 1);
+            // Calculate the differences between the start and end dates
+            var yearsDifference = end_date.getFullYear() - start_date.getFullYear();
+            var monthsDifference = end_date.getMonth() - start_date.getMonth();
+            var daysDifference = end_date.getDate() - start_date.getDate();
+            var result = Math.ceil((inverse ? -1 : 1) * (yearsDifference * 12 + monthsDifference + daysDifference/30)); // Add fractional month
+            return result
+      }
+        
+          
+    function createCalendar(elem, year, month,startDate) {
+        var yy = year;
+        var mon = month - 1;
+        var iCount = 0;
+        
+        let d = new Date(yy, mon);
+        var nmon = getNameOfMonth(mon);        
+        
+        let table = '<table><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr><tr><th colspan="7">' + nmon + " "+ yy + '</th></tr><tr>';
+
+      // spaces for the first row
+      // from Sunday till the first day of the month
+      // * * * 1  2  3  4
+      for (let i = 0; i < getDay(d); i++) {
+        table += '<td style = "background-color:gray;"></td>';
+      }
+
+      // <td> with actual dates
+      while (d.getMonth() == mon) {
+          
+          var day = getDay(d); 
+          var first = new Date(startDate);
+          var last  = new Date(yy,mon,d.getDate());
+                switch (day) {
+                        case 0:
+                        case 6 : 
+                        if (isAHoliday(yy,mon+1,d.getDate(),countryCode.value)) {
+                            table += '<td style = "background-color:orange;">' + d.getDate() + '</td>';
+                        } else {
+                            if (last < first){
+                                table += '<td style = "background-color:gray; color:gray;">' + d.getDate() + '</td>';
+                            } 
+                            else {
+                                table += '<td style = "background-color:yellow;">' + d.getDate() + '</td>';
+                            }
+                            }
+                            
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                         if (isAHoliday(yy,mon+1,d.getDate(),countryCode.value)) {
+                             table += '<td style = "background-color:orange;">' + d.getDate() + '</td>';
+                         } else {
+                             if (last < first){
+                                 table += '<td style = "background-color:gray;color:gray;">' + d.getDate() + '</td>';
+                             } 
+                             else {
+                                 table += '<td style = "background-color:green;">' + d.getDate() + '</td>';   
+                             }
+                         }
+                            break;
+
+                           }  
+                  
+        if (getDay(d) % 7 == 6) { // sunday, last day of week - newline
+          table += '</tr><tr>';
+        }
+
+        d.setDate(d.getDate() + 1);
+      }
+
+      // add spaces after last days of month for the last row
+      // 29 30 31 * * * *
+      if (getDay(d) != 0) {
+        for (let i = getDay(d); i < 7; i++) {
+          table += '<td style = "background-color:gray;"></td>';
+        }
+      }
+
+      // close the table
+      table += '</tr></table></br>';
+        
+      elem.innerHTML = table;    
+      body.appendChild(elem);
+    }
+        
+    function generate_table() {
+        var sd = startDate.value;
+        var from = sd.split("/");
+        var firstDate = new Date(from[0], from[1]-1, from[2]); //[yyyy,mm,dd]
+        var year = parseInt(from[0]);
+        var mm = parseInt(from[1]);
+        var numberOfDays = parseInt(nDays.value);
+        var lastDate = new Date();
+          //lastDate.setTime(firstDate.getTime() + numberOfDays*86400000);
+        lastDate = getLastDate(firstDate,numberOfDays);
+        var mdiff = getMonthsBetween(firstDate,lastDate);
+        var cc = countryCode.value;
+          
+        for (let i = 0; i <= mdiff; i++) { //number of calendars to draw
+            if ((mm % 12) == 0) {
+                createCalendar(myDivs[i], year, mm,firstDate);
+                year++;
+                mm =0;                
+            }
+            else {
+                createCalendar(myDivs[i], year, mm,firstDate);
+            }
+            mm++;
+        }    
+      }
+        
+        
+        function test() {
+            var sd = startDate.value;
+            var from = sd.split("/");
+            var firstDate = new Date(from[0], from[1]-1, from[2]); //[yyyy,mm,dd]
+            var year = parseInt(from[0]);
+            var mm = parseInt(from[1]);
+            var numberOfDays = parseInt(nDays.value);
+            var lastDate = getLastDate(firstDate, numberOfDays);
+            alert("The new date is: " + lastDate);
+            
+        }
+
 
         
         
@@ -60,7 +277,9 @@
         
         function doIt() {
             //TODO : draw the calendar
-            alert("Please draw me!!!");
+            //alert("Please draw me!!!");
+            //test();
+            generate_table();
         }
 
     </script>
